@@ -52,7 +52,7 @@ def checking(request):
     mas = EmailMessage(
         data.subject,
         data.message,
-        'dhairyaajwani2002@gmail.com',
+        'sendprivatemail111@gmail.com',
         data.to,
         )
     if request.FILES.getlist('attach_file') == []:
