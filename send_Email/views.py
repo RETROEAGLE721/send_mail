@@ -1,14 +1,15 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from .models import Email_this
-from django.http import HttpResponse
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.core.files.storage import FileSystemStorage
+from django.views.decorators.csrf import csrf_protect
 import random
-import requests
+import os
 
+@csrf_protect
 def checking(request):
-    id_ =  str(random.randint(1000000,999999999))
+    print("Starting process...")
+    id_ =  str(random.randint(10000,99999))
     print('Validating Mail Address...')
     url = "https://mailcheck.p.rapidapi.com/"
 
@@ -28,10 +29,9 @@ def checking(request):
         pass
     else:
         get_file = request.FILES.getlist('attach_file')
-        print(get_file)
         for x in get_file:
             Email_this.objects.create(filee=x)
-    print('Connenting to database...')
+    print('Connenting to database...') 
     check = Email_this()
     check.id = id_
     check.to  = request.POST.get('too')
@@ -47,6 +47,7 @@ def checking(request):
     check.save()
     print('Saving data to database...')
     data = Email_this.objects.get(id = id_)
+    print(data.filee)
     data.to = data.to.split(',')
     print('Preparing to send mail...')
     mas = EmailMessage(
@@ -62,14 +63,13 @@ def checking(request):
         remove2 = remove1.replace(')', '')
         change = remove2.replace(' ', '_')
         files = change.split(',')
-        fs = FileSystemStorage()
         print('Attaching files...')
         for x in files:
             mas.attach_file(settings.MEDIA_ROOT+str(x))
-            fs.delete(settings.MEDIA_ROOT+str(x))
+            os.remove(settings.MEDIA_ROOT+str(x))
     print('Sending email...')
     mas.send()
-    delete = Email_this.objects.filter(to="not_null")
-    delete.delete()
+    delet = Email_this.objects.filter(to="not_null")
+    delet.delete()
     print('Mail sent successfully')
     return render(request,"frontend.html",{"backendMessage":"0","action":"../check/check"})
