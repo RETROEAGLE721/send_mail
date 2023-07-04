@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import backend
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="dai"),
+    path('', backend.load_frontend, name=""),
     path('check/', include('send_Email.urls')),
 ]
