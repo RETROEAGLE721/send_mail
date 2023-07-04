@@ -21,7 +21,6 @@ from . import backend
 urlpatterns = [
     path('admin/', admin.site.urls,name="dai"),
     path('', backend.load_frontend,name=""),
-    path('send_maile', backend.send_maile),
     path('check/', include('send_Email.urls')),
 ]
 
