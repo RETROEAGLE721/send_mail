@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 class Email_this(models.Model):
     to = models.CharField(max_length=255,default='not_null')
