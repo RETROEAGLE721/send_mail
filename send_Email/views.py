@@ -5,8 +5,8 @@ from django.core.mail import EmailMessage
 from django.views.decorators.csrf import csrf_protect
 import random
 import os
+import requests
 
-@csrf_protect
 def checking(request):
     print("Starting process...")
     id_ =  str(random.randint(10000,99999))
